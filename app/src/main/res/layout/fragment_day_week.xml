@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginBottom="10dp"
+        android:id="@+id/above">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        >
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/how_many_days_do_you_have" android:layout_marginTop="50dp"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            />
+            <EditText
+                android:id="@+id/dayNum"
+                android:layout_height="wrap_content"
+                android:ems="10" android:inputType="number"
+                android:layout_marginStart="25dp" android:layout_width="50dp"/>
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/what_is_the_first_day" android:layout_marginTop="30dp"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            />
+            <Spinner
+                android:id="@+id/startDay"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_marginStart="25dp" android:layout_width="200dp"/>
+            <TextView
+                android:text="@string/when_does_the_day_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView13"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginTop="30dp"/>
+            <EditText
+                android:layout_height="wrap_content"
+                android:inputType="time"
+                android:ems="10"
+                android:id="@+id/start_time"
+                android:layout_marginStart="25dp"
+                android:layout_width="175dp"/>
+        </LinearLayout>
+    </ScrollView>
+    <Button
+        android:id="@+id/day_week_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/above"
+        android:layout_marginTop="125dp"
+        android:text="@string/next" style="@style/Widget.AppCompat.Button.Borderless"/>
+</RelativeLayout>

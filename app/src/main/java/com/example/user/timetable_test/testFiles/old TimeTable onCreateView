@@ -1,0 +1,60 @@
+
+
+            final int page = getArguments().getInt(ARG_SECTION_NUMBER) - 1;
+            dbHandler = new TableDBHandler(getContext(), null);
+
+            TextView textView = (TextView) rootView.findViewById(R.id.pageLabel);
+            textView.setText(data.getDay(page));
+
+            LinearLayout baseView = (LinearLayout) rootView.findViewById(R.id.pageView);
+
+            final TextView     timeStart[]    = new TextView[dbHandler.getSessionNumOnDay(page)];
+            final TextView     locationDesc[] = new TextView[dbHandler.getSessionNumOnDay(page)];
+            final CardView     sessionCard[]  = new CardView[dbHandler.getSessionNumOnDay(page)];
+            final LinearLayout cardLayout[]   = new LinearLayout[dbHandler.getSessionNumOnDay(page)];
+            final TextView     sessionName[]  = new TextView[dbHandler.getSessionNumOnDay(page)];
+
+            Resources r = getResources();
+
+            int margin =
+                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, r.getDisplayMetrics());
+            int marginBot =
+                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, r.getDisplayMetrics());
+
+            LinearLayout.LayoutParams cardParams =
+                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                                  ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            cardParams.setMargins(0, 0, 0, marginBot);
+
+            for(int i = 0; i < dbHandler.getSessionNumOnDay(page); i++){
+
+                sessionCard[i] = new CardView(getContext());
+                cardLayout[i] = new LinearLayout(getContext());
+                sessionName[i] = new TextView(getContext());
+
+                sessionName[i].setText(dbHandler.getSessionName(page, i));
+                sessionName[i].setTextAppearance(android.R.style.TextAppearance_DeviceDefault_Large);
+
+                baseView.addView(sessionCard[i], cardParams);
+                sessionCard[i].setElevation(10);
+                sessionCard[i].addView(cardLayout[i], cardParams);
+                cardLayout[i].setPadding(margin, margin, margin, margin);
+                cardLayout[i].addView(sessionName[i]);
+
+                if(sessionName[i].getText().toString().equals("Break")){
+
+                    sessionCard[i].setBackgroundColor(Color.rgb(67, 160, 71));
+
+                } else if(sessionName[i].getText().toString().equals("Misc.")){
+
+                    sessionCard[i].setBackgroundColor(Color.GRAY);
+
+                } else {
+                    cardLayout[i].setPadding(margin, margin, margin, margin * 10);
+                }
+
+
+            }
+
+

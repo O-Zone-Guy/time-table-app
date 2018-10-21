@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+    <ScrollView
+        android:id="@+id/miscView"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" android:layout_alignParentTop="true"
+        android:layout_marginBottom="50dp">
+        <LinearLayout android:id="@+id/miscLinearView" android:layout_width="match_parent"
+                      android:layout_height="wrap_content" android:orientation="vertical"
+                      android:textAlignment="textEnd">
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content" android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_marginBottom="20dp" android:text="@string/number_of_miscellaneous_sessions"
+                android:textAlignment="textEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" android:textColor="@android:color/black"/>
+        </LinearLayout>
+    </ScrollView>
+    <Button
+        android:id="@+id/miscWeekButt"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/next" android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

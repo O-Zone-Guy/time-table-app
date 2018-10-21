@@ -1,0 +1,197 @@
+
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        getWindow().setExitTransition(new Fade());
+        getWindow().setAllowReturnTransitionOverlap(true);
+        getWindow().setSharedElementExitTransition(new Fade());
+
+        dbHandler = new TableDBHandler(this, null);
+        itemsIn = AnimationUtils.loadAnimation(this, R.anim.list_items);
+
+        List <String> subjects;
+
+
+
+        subjectSpinner = (Spinner) findViewById(R.id.tasks_list_spinner);
+        taskList = (RecyclerView) findViewById(R.id.tasks_list);
+        baseView = (RelativeLayout) findViewById(R.id.activity_view_tasks);
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbar_viewTasks);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar3);
+        setSupportActionBar(toolbar);
+
+
+        //nav view stuff
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_tasks);
+        ActionBarDrawerToggle toggle =
+                new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open,
+                                          R.string.navigation_drawer_close);
+        drawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_task);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        subjects = new ArrayList <>(data.getSubjects());
+        subjects.add("All");
+        String array[] = new String[subjects.size()];
+        subjects.toArray(array);
+        ArrayAdapter spinnerAdaptor = new ArrayAdapter <>(this, android.R.layout.simple_spinner_item, array);
+
+        spinnerAdaptor.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subjectSpinner.setAdapter(spinnerAdaptor);
+
+        final ViewTasksAdaptor adaptor = new ViewTasksAdaptor(this, this);
+
+        if(subjectSpinner.getSelectedItem().toString().equals("All")){
+
+            allSelected();
+
+        } else {
+
+
+            for(int i = 0; i < dbHandler.getIDs(subjectSpinner.getSelectedItem().toString()).length; i++){
+
+                idList.add(dbHandler.getIDs(subjectSpinner.getSelectedItem().toString())[i]);
+
+            }
+
+            titlesList = Arrays.asList(dbHandler.getTaskTitles(subjectSpinner.getSelectedItem().toString()));
+
+            descList = Arrays.asList(dbHandler.getTaskDescs(subjectSpinner.getSelectedItem().toString()));
+
+
+            for(int id : idList){
+
+                String tempDate =
+                        sdf.format(dbHandler.getDueDate(subjectSpinner.getSelectedItem().toString(), id));
+
+                dueDateList.add(tempDate);
+
+            }
+
+            String  titles[]  = new String[titlesList.size()];
+            String  desc[]    = new String[descList.size()];
+            String  dueDate[] = new String[dueDateList.size()];
+            Integer id[]      = new Integer[idList.size()];
+
+            idList.toArray(id);
+            titlesList.toArray(titles);
+            descList.toArray(desc);
+            dueDateList.toArray(dueDate);
+
+            adaptor.setViewLists(titles, desc, dueDate,
+                                 dbHandler.getIDs(subjectSpinner.getSelectedItem().toString()),
+                                 subjectSpinner.getSelectedItem().toString());
+
+            taskList.setAdapter(adaptor);
+            taskList.setLayoutManager(new LinearLayoutManager(this));
+        }
+
+
+        subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+
+
+            @Override
+            public void onItemSelected (AdapterView <?> adapterView, View view, int i, long l){
+
+                List <String> titlesList;
+                List <String> descList;
+                List <String> dueDateList = new ArrayList <>();
+                List          idList;
+
+                Spinner subjectSpinner = (Spinner) findViewById(R.id.tasks_list_spinner);
+
+                if(subjectSpinner.getSelectedItem().toString().equals("All")){
+
+                    allSelected();
+
+
+                } else {
+                    idList = Arrays.asList(dbHandler.getIDs(subjectSpinner.getSelectedItem().toString()));
+
+                    if(linearLayout != null){
+                        subjectText.clear();
+                        recyclerViews.clear();
+
+                        linearLayout.setVisibility(View.INVISIBLE);
+                    }
+
+                    if(taskList.getVisibility() == View.INVISIBLE && idList.size() != 0){
+
+                        taskList.setVisibility(View.VISIBLE);
+
+                        if(noTasks != null){
+                            noTasks.setVisibility(View.INVISIBLE);
+                        }
+
+
+                    }
+
+                    titlesList = Arrays.asList(
+                            dbHandler.getTaskTitles(subjectSpinner.getSelectedItem().toString()));
+                    descList = Arrays.asList(
+                            dbHandler.getTaskDescs(subjectSpinner.getSelectedItem().toString()));
+
+                    for(int j = 0; j < titlesList.size(); j++){
+
+                        String tempDate = sdf.format(
+                                dbHandler.getDueDate(subjectSpinner.getSelectedItem().toString())[j]);
+
+                        dueDateList.add(tempDate);
+
+                    }
+
+
+                    if(titlesList.size() == 0){
+
+                        taskList.setVisibility(View.INVISIBLE);
+
+                        if(noTasks == null){
+                            noTasks = new TextView(getApplicationContext());
+
+                            noTasks.setText(R.string.noTasks);
+                            noTasks.setTextSize(20);
+
+                            RelativeLayout.LayoutParams noTasksParams =
+                                    new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                                                                    ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                            noTasksParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                            noTasksParams.addRule(RelativeLayout.BELOW, R.id.textView10);
+                            noTasksParams
+                                    .setMargins(0, (int) getResources().getDimension(R.dimen.text_margin), 0,
+                                                0);
+                            noTasks.startAnimation(itemsIn);
+                            baseView.addView(noTasks, noTasksParams);
+                        } else {
+                            noTasks.startAnimation(itemsIn);
+                            noTasks.setVisibility(View.VISIBLE);
+                        }
+
+                    } else {
+
+                        String  titles[]  = new String[titlesList.size()];
+                        String  desc[]    = new String[descList.size()];
+                        String  dueDate[] = new String[dueDateList.size()];
+                        Integer id[]      = new Integer[idList.size()];
+
+                        titlesList.toArray(titles);
+                        descList.toArray(desc);
+                        dueDateList.toArray(dueDate);
+                        idList.toArray(id);
+
+                        adaptor.setViewLists(titles, desc, dueDate, id,
+                                             subjectSpinner.getSelectedItem().toString());
+
+                        adaptor.notifyDataSetChanged();
+                    }
+                }
+
+
+            }
+
+
+            @Override
+            public void onNothingSelected (AdapterView <?> adapterView){
+
+            }
+        });
